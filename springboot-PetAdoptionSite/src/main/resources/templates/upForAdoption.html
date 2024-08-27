@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Home page</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.1/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	  <a class="navbar-brand" href="#">
+	  <img src="/photo/logo.png" style="width:100px">
+       </a>
+
+	  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+	      <li class="nav-item">
+	        <a class="nav-link" th:href="@{/}">主頁 <span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" th:href="@{/memberInfo}">會員資料</a>
+	      </li>
+		  <li class="nav-item">
+		   <a class="nav-link" th:href="@{/postHistory}">我的帖子</a>
+		  </li>
+		  <li class="nav-item active">
+		    <a class="nav-link" th:href="@{/upForAdoption}">送養區</a>
+		  </li>
+		  <li class="nav-item">
+		  		    <a class="nav-link" th:href="@{/posts}">領養區</a>
+		  </li>
+		  <li class="nav-item">
+		  		    <a class="nav-link" th:href="@{/messenger}">通信錄</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="isAuthenticated()">
+		  	 <a class="nav-link" th:href="@{/logout}">登出</a>
+		  </li>
+	    </ul>
+	
+
+	  </div>
+	</nav>
+	
+	<!-- success message -->
+	<div class="was-validated" th:if="${param.success}">
+	 <div class="alert alert-info">成功發佈！</div>
+	</div>
+	
+	<!-- error message -->
+	<div class="was-validated" th:if="${param.error}">
+	 <div class="alert alert-info">發生問題！</div>
+	</div>
+	
+	<div class="container">
+		<h3 style="font-weight: bold;">發佈送養信息</h3>
+		<form th:action="@{/upForAdoption}" method="post" enctype="multipart/form-data">
+		  <div class="form-group">
+		    <label for="exampleFormControlInput1" style="font-weight: bold;">標題:</label>
+		    <input type="title" class="form-control" name="title" id="title" placeholder="請輸入送養標題" required>
+		  </div>
+		  <div class="form-group">
+			<label for="exampleFormControlInput1" style="font-weight: bold;">動物類型:</label>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-1" name="animal" value="大型犬">
+					<label for="parent-1">大型犬</label>
+					<ul>
+						<div class="checkbox-subgroup">
+							<input type="checkbox" id="child-1-1" name="animal" value="金毛尋回犬">
+							<label for="child-1-1">金毛尋回犬</label>
+							<input type="checkbox" id="child-1-2" name="animal" value="秋田犬">
+							<label for="gchild-1-2">秋田犬</label>
+							<input type="checkbox" id="child-1-3" name="animal" value="薩摩耶犬">
+							<label for="gchild-1-3">薩摩耶犬</label>
+							<input type="checkbox" id="child-1-4" name="animal" value="阿拉斯加雪橇犬">
+							<label for="gchild-1-4">阿拉斯加雪橇犬</label>
+							<input type="checkbox" id="child-1-5" name="animal" value="哈士奇">
+							<label for="gchild-1-5">哈士奇</label>
+							<input type="checkbox" id="child-1-6" name="animal" value="其他大型犬">
+							<label for="gchild-1-6">其他大型犬</label>
+						  </div>
+					</ul>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-2" name="animal" value="中型犬">
+					<label for="parent-2">中型犬</label>
+					<ul>
+						<div class="checkbox-subgroup">
+							<input type="checkbox" id="child-2-1" name="animal" value="柴犬">
+							<label for="child-2-1">柴犬</label>
+							<input type="checkbox" id="child-2-2" name="animal" value="柯基">
+							<label for="child-2-2">柯基</label>
+							<input type="checkbox" id="child-2-3" name="animal" value="其他中型犬">
+							<label for="child-2-3">其他中型犬</label>
+						  </div>
+					</ul>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-3" name="animal" value="小型犬">
+					<label for="parent-3">小型犬</label>
+					<ul>
+						<div class="checkbox-subgroup">
+							<input type="checkbox" id="child-3-1" name="animal" value="臘腸犬">
+							<label for="child-3-1">臘腸犬</label>
+							<input type="checkbox" id="child-3-2" name="animal" value="貴賓犬">
+							<label for="child-3-2">貴賓犬</label>
+							<input type="checkbox" id="child-3-3" name="animal" value="法國鬥牛犬">
+							<label for="child-3-3">法國鬥牛犬</label>
+							<input type="checkbox" id="child-3-4" name="animal" value="比熊犬">
+							<label for="child-3-4">比熊犬</label>
+							<input type="checkbox" id="child-3-5" name="animal" value="其他小型犬">
+							<label for="child-3-5">其他小型犬</label>
+						  </div>
+
+					</ul>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-4" name="animal" value="長毛貓">
+					<label for="parent-3">長毛貓</label>
+					<ul>
+						<div class="checkbox-subgroup">
+							<input type="checkbox" id="child-4-1" name="animal" value="緬因貓">
+							<label for="child-4-1">緬因貓</label>
+							<input type="checkbox" id="child-4-2" name="animal" value="伯曼貓">
+							<label for="child-4-2">伯曼貓</label>
+							<input type="checkbox" id="child-4-3" name="animal" value="布偶貓">
+							<label for="child-4-3">布偶貓</label>
+							<input type="checkbox" id="child-4-4" name="animal" value="其他長毛貓">
+							<label for="child-4-4">其他長毛貓</label>
+						  </div>
+					</ul>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-5" name="animal" value="短毛貓">
+					<label for="parent-5">短毛貓</label>
+					<ul>
+						<div class="checkbox-subgroup">
+							<input type="checkbox" id="child-5-1" name="animal" value="英國短毛貓">
+							<label for="child-5-1">英國短毛貓</label>
+							<input type="checkbox" id="child-5-2" name="animal" value="唐貓">
+							<label for="child-5-2">唐貓</label>
+							<input type="checkbox" id="child-5-3" name="animal" value="其他短毛貓">
+							<label for="child-5-3">其他短毛貓</label>
+						  </div>
+					</ul>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-6" name="animal" value="無毛貓">
+					<label for="parent-6">無毛貓</label>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-7" name="animal" value="兔子">
+					<label for="parent-7">兔子</label>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-8" name="animal" value="倉鼠">
+					<label for="parent-8">倉鼠</label>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-9" name="animal" value="天竺鼠">
+					<label for="parent-9">天竺鼠</label>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-10" name="animal" value="龍貓">
+					<label for="parent-10">龍貓</label>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-11" name="animal" value="爬蟲類">
+					<label for="parent-11">爬蟲類</label>
+				</div>
+			</ul>
+			<ul>
+				<div class="checkbox-group">
+					<input type="checkbox" id="parent-12" name="animal" value="其他">
+					<label for="parent-12">其他</label>
+				</div>
+			</ul>
+			  <div class="form-group">
+		    <label for="exampleFormControlTextarea1" style="font-weight: bold;">内容:</label>
+		    <textarea class="form-control" name = "content" id="content" rows="3"  placeholder="送養動物的資料，送養理由等等" required></textarea>
+		  </div>
+		  <div class="mb-3">
+		    <label for="formFile" class="form-label" style="font-weight: bold;">上載動物圖片(如有):</label>
+		    <input class="form-control" type="file" id="formFile" name="image" accept=".png" required>
+		  </div>
+		  <div class="form-group">
+		  <button type="submit" class="btn btn-success">發佈</button>
+		  <button type="reset" class="btn btn-secondary" id="reset">取消</button>
+		  </div>
+		</form>
+	</div>
+	
+	<script type="text/javascript" src="js/adoptionScript.js"></script>
+	
+</body>
+</html>

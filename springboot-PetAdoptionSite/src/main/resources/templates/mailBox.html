@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Home page</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.1/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	  <a class="navbar-brand" href="#">
+	  <img src="/photo/logo.png" style="width:100px">
+       </a>
+
+	  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+	      <li class="nav-item active">
+	        <a class="nav-link" th:href="@{/}">主頁 <span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" th:href="@{/memberInfo}">會員資料</a>
+	      </li>
+		  <li class="nav-item ">
+		   <a class="nav-link" th:href="@{/postHistory}">我的帖子</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" th:href="@{/upForAdoption}">送養區</a>
+		  </li>
+		  <li class="nav-item">
+		  	<a class="nav-link" th:href="@{/posts}">領養區</a>
+		  </li>
+		  <li class="nav-item active">
+		  		    <a class="nav-link" th:href="@{/messenger}">通信錄</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="isAuthenticated()">
+		  	 <a class="nav-link" th:href="@{/logout}">登出</a>
+		  </li>
+	    </ul>
+	
+
+	  </div>
+	</nav>
+	<!--iterate the post repo and show all the posts-->
+	<div class="container"></div>
+	<div class="chatbox">
+	  <div class="chatbox-header">
+	    <span class="chatbox-title">Chat with John Doe</span>
+	  </div>
+	  <div class="chatbox-body">
+	    <div class="message-container">
+	      <div class="message">
+	        <span class="message-text">Hello, how are you?</span>
+	        <span class="message-time">10:45 AM</span>
+	      </div>
+	      <div class="message">
+	        <span class="message-text">I'm good, thanks! How about you?</span>
+	        <span class="message-time">10:46 AM</span>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="chatbox-footer">
+	    <input type="text" class="chatbox-input" placeholder="Type a message...">
+	    <button class="send-button">Send</button>
+	  </div>
+	</div>
+
+
+		
+	<div class="container">
+
+	<tr th:each="recipientMsg : ${recipientList}">
+		<div class="card" style="width: 18rem;">
+		  <div class="card-body">
+		    <h5 class="card-title" th:text="${recipientMsg.msgTitle}"></h5>
+		    <h6 class="card-subtitle mb-2 text-muted" th:text="${recipientMsg.msgDate}"></h6>
+		    <p class="card-text" th:text="${recipientMsg.msgContent}"></p>
+		    <a href="#" class="card-link">Card link</a>
+		    <a href="#" class="card-link">Another link</a>
+		  </div>
+		</div>
+	</tr>
+	</div>
+	<div class="container">
+	<tr th:each="sendMsg : ${sendList}">
+		<div class="card" style="width: 18rem;">
+		  <div class="card-body">
+		    <h5 class="card-title" th:text="${sendMsg.msgTitle}"></h5>
+		    <h6 class="card-subtitle mb-2 text-muted" th:text="${sendMsg.msgDate}"></h6>
+		    <p class="card-text" th:text="${sendMsg.msgContent}"></p>
+		    <a href="#" class="card-link">回復/a>
+		    <a href="#" class="card-link">Another link</a>
+		  </div>
+		</div>
+	</tr>
+	</div>
+
+
+</body>
+</html>

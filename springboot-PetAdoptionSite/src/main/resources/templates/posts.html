@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Home page</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.1/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	  <a class="navbar-brand" href="#">
+	  <img src="/photo/logo.png" style="width:100px">
+       </a>
+
+	  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+	      <li class="nav-item active">
+	        <a class="nav-link" th:href="@{/}">主頁 <span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" th:href="@{/memberInfo}">會員資料</a>
+	      </li>
+		  <li class="nav-item">
+		   <a class="nav-link" th:href="@{/postHistory}">我的帖子</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" th:href="@{/upForAdoption}">送養區</a>
+		  </li>
+		  <li class="nav-item active">
+		  	<a class="nav-link" th:href="@{/posts}">領養區</a>
+		  </li>
+		  <li class="nav-item">
+		  		    <a class="nav-link" th:href="@{/messenger}">通信錄</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="isAuthenticated()">
+		  	 <a class="nav-link" th:href="@{/logout}">登出</a>
+		  </li>
+	    </ul>
+	
+
+	  </div>
+	</nav>
+	<!--iterate the post repo and show all the posts-->
+	<div class="container">
+		<form class="form-inline" th:action="@{/posts}" method="post">
+		  <input class="form-control mr-sm-2" th:object="${keyword}" name="keyword" type="search" placeholder="輸入關鍵字" aria-label="Search">
+		  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜尋</button>
+		</form>
+	<tr th:each="post : ${posts}">
+			<div class="card custom-card text-center mr-1 mt-1 ml-1 mb-1" style="width: 18rem; display: inline-block ;border: 3px solid rgb(192, 192, 192)" >
+			  <div class="card-body">
+				<img class="img-fluid" th:src="'data:image/png;base64,'+${post.image}" alt="Image">
+			    <h5 class="card-title" th:text="${post.title}" style="font-weight: bold;"></h5>
+			    <p class="card-text" th:text="${post.content}" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 200px;"></p>
+				<p class="card-text"><small class="text-muted" th:text="${post.animal}"></small></p>
+				<button type="button" class="btn btn-primary" th:value=${post.user.userId} id="buttonRecipient" onclick="connect(this)"><span>聯絡送養人</span></button>
+			  </div>
+			</div>		
+
+		</tr>
+
+	<div class="chat-window" id="chat-window" style="display: none;">
+	    <div class="header">
+	        <span class="title">信息</span>
+			<h5  class="title" id="recipient" name="recipient"></h5>
+	        <span class="close" onclick="disconnect()">&times;</span>
+	    </div>
+	    <div class="messages">
+	        <!-- Messages will be displayed here -->
+			<ul id="chat-log">
+			</ul>
+	    </div>
+	    <input type="text" th:object="${message}" name="message" id="message-input" class="input-field" placeholder="輸入信息...">
+	    <button id="send-button" class="send-button" onclick="sendMessage();">傳送</button>
+	</div>
+	<script th:inline="javascript">
+
+		//Configure the socket and socketClient
+		var socket = new SockJS('/websocket');
+		var stompClient = Stomp.over(socket);
+		
+
+			//define the elements of the chat window
+			var messageInput = document.getElementById('message-input');
+			var sendMessageButton = document.getElementById('send-button');
+			var openChatButton = document.getElementById('open-chat');
+			var closeChatButton = document.querySelector('.close');
+			var chatWindow = document.getElementById('chat-window');
+			var recipient = document.getElementById('recipient');
+			var chatLog = document.getElementById('chat-log');
+			
+
+			function connect(button) {
+			  // Show the chat window
+			  const recipient = document.getElementById('recipient'); // Assuming an element with id "recipient"
+			  recipient.value = button.value;
+			  recipient.textContent = button.value;
+			  chatWindow.style.display = 'block';
+
+			  // Establish a connection to the WebSocket
+			  stompClient.connect({}, function (frame) {
+			    console.log("Connected to WebSocket");
+			    subscribeToMessages(); // Move subscription to a separate function
+			  }, function (error) {
+			    console.error('Error connecting to WebSocket:', error);
+			    // Consider displaying an error message to the user
+			  });
+			}
+
+			function subscribeToMessages() {
+			  stompClient.subscribe("/topic/messages", function (messagesList) {
+			    console.log("Receiving message");
+			    const messages = JSON.parse(messagesList);
+				appendMessagesToLog(messages);
+			    });
+			}
+			
+			function appendMessagesToLog(messages) {
+			    messages.forEach((message) => {
+			        const logEntry = `${message.msgDateTime} - ${message.msgContent}`;
+					chatLog.appendChild("<li>"+logEntry+"</li>");
+			    });
+			}
+			
+			
+			//disconnect function
+			function disconnect() {
+			    if(stompClient != null) {
+			     stompClient.disconnect();
+				 alert("Web socket disconnected");
+			    }
+				chatWindow.style.display = 'none';
+			 }
+			 
+			 function sendMessage(){
+				//Set the message
+				var message = messageInput.value.trim();
+				if (message !== ""){
+					stompClient.send("/app/sendMessage", {}, JSON.stringify({"text": message, "receiverId": recipient.value}));
+					//re-set message box as blank
+				}
+				messageInput.value = "";
+				}
+</script>
+</body>
+</html>

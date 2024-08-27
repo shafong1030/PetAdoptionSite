@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Please sign in</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" integrity="sha384-oOE/3m0LUMPub4kaC09mrdEhIc+e3exm4xOGxAmuFXhBNF4hcg/6MiAXAf5p0P56" crossorigin="anonymous"/>
+  </head>
+  <body>
+     <div class="container">
+      <form class="form-signin" method="post" th:action="@{/login}">
+        <h2 class="form-signin-heading">會員登入</h2>
+		<br/>
+		<!--error message-->
+		<div th:if="${param.error}">
+			<div class="alert alert-danger">電郵地址或者密碼無效</div>
+			
+		</div>
+		<!-- logout message -->
+		     <div th:if="${param.logout}">
+		      <div class="alert alert-info">成功登出！</div>
+		</div>
+        <p>
+          <label for="username" class="sr-only">電郵地址</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="電郵地址" required autofocus>
+        </p>
+        <p>
+          <label for="password" class="sr-only">密碼</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="密碼" required>
+        </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
+		<span>還沒成爲會員？ <a href="/" th:href="@{/NewReg}">會員登記
+		  </a></span>
+      </form>
+</div>
+</body></html>

@@ -1,0 +1,167 @@
+@charset "UTF-8";
+            /*the password rules division is not shown at the first place*/
+			#pw_rules{
+				display: none;
+			}
+            /*the password rules format when it's shown(not validated)*/
+			.pw_invalid{
+				color:gray;
+			}
+			.pw_invalid:before{
+				position: relative;
+				left: -px;
+				content: "✖";
+			}
+			/*the password rules format when it's shown(validated)*/
+			.pw_valid{
+			    color : green;
+			}
+			.pw_valid:before {
+			    position: relative;
+			    left: -px;
+			    content: "✔";
+			}
+						
+			.invalid-feedback{
+				color:red;
+				display: none;
+			}
+
+			a.nav-link{
+				font-weight: bold;
+				font-size: larger;
+			}
+			
+			.unchecked{
+				color: gray;
+			}
+			.checked{
+				color:yellow;
+			}
+			
+			.chatbox {
+			  position: fixed;
+			  bottom: 0;
+			  right: 0;
+			  width: 300px;
+			  height: 400px;
+			  background-color: #fff;
+			  border: 1px solid #ddd;
+			  padding: 10px;
+			  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			}
+
+			.chatbox-header {
+			  background-color: #f0f0f0;
+			  padding: 10px;
+			  border-bottom: 1px solid #ddd;
+			}
+
+			.chatbox-title {
+			  font-weight: bold;
+			  margin-right: 10px;
+			}
+
+			.close-button {
+			  float: right;
+			  cursor: pointer;
+			}
+
+			.chatbox-body {
+			  padding: 10px;
+			  overflow-y: auto;
+			}
+
+			.message-container {
+			  padding: 10px;
+			}
+
+			.message {
+			  margin-bottom: 10px;
+			  padding: 10px;
+			  border-bottom: 1px solid #ddd;
+			}
+
+			.message-text {
+			  font-size: 14px;
+			}
+
+			.message-time {
+			  font-size: 12px;
+			  color: #999;
+			}
+
+			.chatbox-footer {
+			  background-color: #f0f0f0;
+			  padding: 10px;
+			  border-top: 1px solid #ddd;
+			}
+
+			.chatbox-input {
+			  width: 80%;
+			  height: 30px;
+			  padding: 10px;
+			  border: 1px solid #ddd;
+			}
+
+			.send-button {
+			  width: 20%;
+			  height: 30px;
+			  background-color: #4CAF50;
+			  color: #fff;
+			  border: none;
+			  padding: 10px;
+			  font-size: 14px;
+			  cursor: pointer;
+			}
+			
+			/* Add some custom styling to the chat window */
+			.chat-window {
+			    position: fixed;
+			    bottom: 0;
+			    right: 0;
+			    width: 300px;
+			    height: 400px;
+			    background-color: #fff;
+			    border: 1px solid #ccc;
+			    padding: 10px;
+			    z-index: 1000;
+			}
+			.chat-window .header {
+			    background-color: #f0f0f0;
+			    padding: 10px;
+			    border-bottom: 1px solid #ccc;
+			}
+			.chat-window .header .title {
+			    font-weight: bold;
+			}
+			.chat-window .header .close {
+			    float: right;
+			    cursor: pointer;
+			}
+			.chat-window .messages {
+			    padding: 10px;
+			    overflow-y: auto;
+			    height: 250px;
+			}
+			.chat-window .input-field {
+			    padding: 10px;
+			    border: 1px solid #ccc;
+			    width: 100%;
+			}
+			.chat-window .send-button {
+			    padding: 10px;
+			    background-color: #4CAF50;
+			    color: #fff;
+			    border: none;
+			    border-radius: 5px;
+			    cursor: pointer;
+			}
+			.chat-window .send-button:hover {
+			    background-color: #3e8e41;
+			}
+
+
+			
+
+
